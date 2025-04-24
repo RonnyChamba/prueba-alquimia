@@ -22,9 +22,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "full_name", nullable = false, length = 100)
-    private String fullName;
-
     @Column(name = "username", nullable = false, length = 20)
     private String username;
 
@@ -35,10 +32,11 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_company", referencedColumnName = "id")
-    private Company company;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Customer> customers;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = new Date();
+    }
 }
