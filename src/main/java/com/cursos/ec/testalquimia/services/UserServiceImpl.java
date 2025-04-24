@@ -7,12 +7,16 @@ import com.cursos.ec.testalquimia.mappers.IUserMapper;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
 import com.cursos.ec.testalquimia.messages.request.UserReqDTO;
 import com.cursos.ec.testalquimia.messages.response.GenericRespDTO;
+import com.cursos.ec.testalquimia.messages.response.UserRespDTO;
 import com.cursos.ec.testalquimia.repository.IUserRepository;
 import com.cursos.ec.testalquimia.util.GeneralUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +27,8 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
 
     @Override
-    public GenericRespDTO<String> saveUser(GenericReqDTO<UserReqDTO> genericReqDTO)  throws GenericException {
+    @Transactional
+    public GenericRespDTO<String> saveUser(GenericReqDTO<UserReqDTO> genericReqDTO) throws GenericException {
         LOGGER.info("Saving user: {}", genericReqDTO.payload());
 
         if (userRepository.existsByUsername(genericReqDTO.payload().username())) {
@@ -36,5 +41,19 @@ public class UserServiceImpl implements IUserService {
 
         return GeneralUtil.buildGenericSuccessResp(userSaved.getId().toString(),
                 "User saved successfully");
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public GenericRespDTO<List<UserRespDTO>> finaAllUser() throws GenericException {
+
+        LOGGER.info("Finding all users");
+        var users = userRepository.findAll();
+        var listDto = IUserMapper.INSTANCE.toListResp(users);
+
+        return GeneralUtil.buildGenericSuccessResp(listDto,
+                listDto.isEmpty() ? "No users found" : "Users found successfully");
+
+
     }
 }
