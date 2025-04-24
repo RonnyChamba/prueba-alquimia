@@ -1,6 +1,8 @@
 package com.cursos.ec.testalquimia.services;
 
 
+import com.cursos.ec.testalquimia.exceptions.ConflictException;
+import com.cursos.ec.testalquimia.exceptions.GenericException;
 import com.cursos.ec.testalquimia.mappers.IUserMapper;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
 import com.cursos.ec.testalquimia.messages.request.UserReqDTO;
@@ -21,8 +23,14 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
 
     @Override
-    public GenericRespDTO<String> saveUser(GenericReqDTO<UserReqDTO> genericReqDTO) {
+    public GenericRespDTO<String> saveUser(GenericReqDTO<UserReqDTO> genericReqDTO)  throws GenericException {
         LOGGER.info("Saving user: {}", genericReqDTO.payload());
+
+        if (userRepository.existsByUsername(genericReqDTO.payload().username())) {
+            throw new ConflictException("User already exists");
+
+        }
+
         var user = IUserMapper.INSTANCE.toEntity(genericReqDTO.payload());
         var userSaved = userRepository.save(user);
 

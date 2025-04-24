@@ -9,7 +9,6 @@ public record UserReqDTO(
         String username,
         @NotBlank(message = "The password field id cannot be blank")
         String password,
-
         @NotBlank(message = "The socialReason field id cannot be blank")
         String socialReason
     ) {

@@ -28,6 +28,9 @@ public class User {
     @Column(name = "password", nullable = false, length = 50)
     private String password;
 
+    @Column(name = "social_reason", nullable = false, length = 50)
+    private String socialReason;
+
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;

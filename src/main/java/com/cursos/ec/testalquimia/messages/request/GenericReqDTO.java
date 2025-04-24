@@ -1,8 +1,8 @@
 package com.cursos.ec.testalquimia.messages.request;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 
 public record GenericReqDTO<T>(
 
