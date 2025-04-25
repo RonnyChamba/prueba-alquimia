@@ -24,4 +24,13 @@ public class CustomerController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAllCustomers(@RequestParam(required = false) String paramFilter) throws GenericException {
+        var response = customerService.getAllCustomers(paramFilter);
+
+        return new ResponseEntity<>(response, response.data().isEmpty()
+                ? HttpStatus.NO_CONTENT
+                : HttpStatus.OK);
+    }
+
 }

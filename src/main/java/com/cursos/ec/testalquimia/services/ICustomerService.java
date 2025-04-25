@@ -6,14 +6,26 @@ import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerRespDTO;
 import com.cursos.ec.testalquimia.messages.response.GenericRespDTO;
 
+import java.util.List;
+
 public interface ICustomerService {
 
     /**
      * * Method to save a customer
      *
      * @param reqDTO : GenericReqDTO<CustomerReqDTO>
-     * @return : GenericRespDTO<String>
+     * @return : GenericRespDTO<CustomerRespDTO>
      * @throws GenericException : GenericException
      */
     GenericRespDTO<CustomerRespDTO> saveCustomer(GenericReqDTO<CustomerReqDTO> reqDTO) throws GenericException;
+
+
+    /**
+     * Method to get all customers by filter
+     *
+     * @param paramFilter : String
+     * @return : GenericRespDTO<List<CustomerRespDTO>>
+     * @throws GenericException : GenericException
+     */
+    GenericRespDTO<List<CustomerRespDTO>> getAllCustomers(String paramFilter) throws GenericException;
 }

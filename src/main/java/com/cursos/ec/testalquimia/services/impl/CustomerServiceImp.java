@@ -23,6 +23,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImp implements ICustomerService {
@@ -57,6 +60,27 @@ public class CustomerServiceImp implements ICustomerService {
                 .status("OK")
                 .data(ICustomerMapper.INSTANCE.toCustomerRespDTO(userSaved))
                 .message("Customer saved")
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public GenericRespDTO<List<CustomerRespDTO>> getAllCustomers(String paramFilter) throws GenericException {
+
+        LOGGER.info("Get all customers with filter: {}", paramFilter);
+
+        var paramSearch = Objects.requireNonNullElse(paramFilter, "").trim().toUpperCase();
+
+        var username = sessionService.retrieveUsernameFromContext();
+        var customers = customerRepository.findAllCustomerByUser(username, paramSearch);
+
+        var listCustomers = ICustomerMapper.INSTANCE.toListCustomerRespDTO(customers);
+
+        return GenericRespDTO.<List<CustomerRespDTO>>
+                        builder()
+                .status("OK")
+                .data(listCustomers)
+                .message(listCustomers.isEmpty() ? "No customers found" : "Customers found")
                 .build();
     }
 
