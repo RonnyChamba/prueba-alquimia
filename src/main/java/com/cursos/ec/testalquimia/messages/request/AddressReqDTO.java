@@ -1,14 +1,13 @@
 package com.cursos.ec.testalquimia.messages.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class AddressReqDTO {
-
-    private String address;
-    private String city;
+public record AddressReqDTO(
+        @NotBlank(message = "The province field is required")
+        String province,
+        @NotBlank(message = "The city field is required")
+        String city,
+        @NotBlank(message = "The address field is required")
+        String address
+) {
 }

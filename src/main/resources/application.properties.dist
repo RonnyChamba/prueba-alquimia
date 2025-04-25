@@ -1,5 +1,4 @@
 spring.application.name=test-alquimia
-path.webservice=/alquimia
 server.port=8081
 spring.datasource.url=jdbc:postgresql://localhost:5432/test-alquimia
 spring.datasource.username=XXXXXXXXXXX
@@ -8,4 +7,4 @@ spring.jpa.generate-ddl=true
 spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults=false
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialectspring.application.name=test-alquimia
-jwt.secret=secret
+jwt.secret=jwt.secret=miclavesecretaparalapruebadejwtmiclavesecretaparalapruebadejwt

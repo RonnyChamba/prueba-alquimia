@@ -1,4 +1,4 @@
-package com.cursos.ec.testalquimia.services;
+package com.cursos.ec.testalquimia.services.impl;
 
 
 import com.cursos.ec.testalquimia.exceptions.ConflictException;
@@ -10,6 +10,7 @@ import com.cursos.ec.testalquimia.messages.request.UserReqDTO;
 import com.cursos.ec.testalquimia.messages.response.GenericRespDTO;
 import com.cursos.ec.testalquimia.messages.response.UserRespDTO;
 import com.cursos.ec.testalquimia.repository.IUserRepository;
+import com.cursos.ec.testalquimia.services.IUserService;
 import com.cursos.ec.testalquimia.util.GeneralUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,9 @@ public class Customer {
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
 
+    @Column(name = "identification", nullable = false, length = 15)
+    private String identification;
+
     @Column(name = "identification_type", nullable = false, length = 5)
     private String identificationType;
 
@@ -34,9 +38,18 @@ public class Customer {
     @Column(name = "cellphone", length = 20)
     private String cellphone;
 
+    @Column(name = "province", nullable = false, length = 100)
+    private String province;
+
+    @Column(name = "city", nullable = false, length = 100)
+    private String city;
+
+    @Column(name = "address", nullable = false, length = 100)
+    private String address;
+
     @Column(name = "create_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private String createAt;
+    private Date createAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_user")
@@ -48,6 +61,11 @@ public class Customer {
     public void addAddress(CustomerAddress customerAddress) {
         listsAddresses.add(customerAddress);
         customerAddress.setCustomer(this);
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createAt = new Date();
     }
 
 }
