@@ -14,6 +14,7 @@ import com.cursos.ec.testalquimia.util.GeneralUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class UserServiceImpl implements IUserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
     private final IUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -36,8 +38,8 @@ public class UserServiceImpl implements IUserService {
             throw new ConflictException("User already exists");
 
         }
-
         var user = IUserMapper.INSTANCE.toEntity(genericReqDTO.payload());
+        user.setPassword(passwordEncoder.encode(genericReqDTO.payload().password()));
         var userSaved = userRepository.save(user);
 
         return GeneralUtil.buildGenericSuccessResp(userSaved.getId().toString(),
