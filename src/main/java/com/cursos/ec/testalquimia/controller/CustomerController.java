@@ -53,4 +53,11 @@ public class CustomerController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{id}/address")
+    public ResponseEntity<?> getAllAddressCustomer(@PathVariable Long id) throws GenericException {
+        var response = customerService.getAllAddressesCustomer(id);
+        return new ResponseEntity<>(response, response.data().isEmpty()
+                ? HttpStatus.NO_CONTENT
+                : HttpStatus.OK);
+    }
 }

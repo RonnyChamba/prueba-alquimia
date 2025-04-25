@@ -4,6 +4,7 @@ import com.cursos.ec.testalquimia.entities.Customer;
 import com.cursos.ec.testalquimia.entities.CustomerAddress;
 import com.cursos.ec.testalquimia.messages.request.AddressReqDTO;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
+import com.cursos.ec.testalquimia.messages.response.AddressRespDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerRespDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -22,4 +23,6 @@ public interface ICustomerMapper {
     CustomerRespDTO toCustomerRespDTO(Customer customer);
 
     List<CustomerRespDTO> toListCustomerRespDTO(List<Customer> customers);
+
+    List<AddressRespDTO> toListAddressRespDTO(List<CustomerAddress> addresses);
 }

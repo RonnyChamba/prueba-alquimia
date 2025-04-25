@@ -10,6 +10,7 @@ import com.cursos.ec.testalquimia.mappers.ICustomerMapper;
 import com.cursos.ec.testalquimia.messages.request.AddressReqDTO;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
+import com.cursos.ec.testalquimia.messages.response.AddressRespDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerRespDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerUpdateReqDTO;
 import com.cursos.ec.testalquimia.messages.response.GenericRespDTO;
@@ -143,6 +144,24 @@ public class CustomerServiceImp implements ICustomerService {
         customerRepository.save(customer);
 
         LOGGER.info("Address added to customer: {}", id);
+    }
+
+    @Override
+    public GenericRespDTO<List<AddressRespDTO>> getAllAddressesCustomer(Long id) throws GenericException {
+
+        LOGGER.info("Get all addresses of customer with id: {}", id);
+        var customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+
+        var addresses = customer.getListsAddresses();
+
+        var listAddresses = ICustomerMapper.INSTANCE.toListAddressRespDTO(addresses);
+        return GenericRespDTO.<List<AddressRespDTO>>
+                        builder()
+                .status("OK")
+                .data(listAddresses)
+                .message(listAddresses.isEmpty() ? "No addresses found" : "Addresses found")
+                .build();
     }
 
     private void setNewDataCustomer(Customer customer, CustomerUpdateReqDTO data) {

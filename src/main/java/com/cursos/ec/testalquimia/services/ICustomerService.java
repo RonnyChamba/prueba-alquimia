@@ -4,6 +4,7 @@ import com.cursos.ec.testalquimia.exceptions.GenericException;
 import com.cursos.ec.testalquimia.messages.request.AddressReqDTO;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
+import com.cursos.ec.testalquimia.messages.response.AddressRespDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerRespDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerUpdateReqDTO;
 import com.cursos.ec.testalquimia.messages.response.GenericRespDTO;
@@ -57,4 +58,13 @@ public interface ICustomerService {
      * @throws GenericException : GenericException
      */
     void addAddressCustomer(Long id, GenericReqDTO<AddressReqDTO> reqDTO) throws GenericException;
+
+    /**
+     * Method to get all addresses of a customer
+     *
+     * @param id : Long
+     * @return : GenericRespDTO<List<AddressRespDTO>>
+     * @throws GenericException : GenericException
+     */
+    GenericRespDTO<List<AddressRespDTO>> getAllAddressesCustomer(Long id) throws GenericException;
 }

@@ -56,7 +56,7 @@ public class Customer {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
-    public List<CustomerAddress> listsAddresses = new ArrayList<>();
+    private List<CustomerAddress> listsAddresses = new ArrayList<>();
 
     public void addAddress(CustomerAddress customerAddress) {
         listsAddresses.add(customerAddress);
