@@ -34,4 +34,12 @@ public class UserController {
         return new ResponseEntity<>(response, response.data().isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK);
 
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GenericRespDTO<UserRespDTO>> findUser(@PathVariable Long id) throws GenericException {
+        var response = userService.findUser(id);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
 }

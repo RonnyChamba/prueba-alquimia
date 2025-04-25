@@ -11,5 +11,8 @@ import java.util.List;
 public interface IUserService {
 
     GenericRespDTO<String> saveUser(GenericReqDTO<UserReqDTO> genericReqDTO) throws GenericException;
+
     GenericRespDTO<List<UserRespDTO>> finaAllUser() throws GenericException;
+
+    GenericRespDTO<UserRespDTO> findUser(Long id) throws GenericException;
 }

@@ -3,6 +3,7 @@ package com.cursos.ec.testalquimia.services;
 
 import com.cursos.ec.testalquimia.exceptions.ConflictException;
 import com.cursos.ec.testalquimia.exceptions.GenericException;
+import com.cursos.ec.testalquimia.exceptions.NotFoundException;
 import com.cursos.ec.testalquimia.mappers.IUserMapper;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
 import com.cursos.ec.testalquimia.messages.request.UserReqDTO;
@@ -53,7 +54,18 @@ public class UserServiceImpl implements IUserService {
 
         return GeneralUtil.buildGenericSuccessResp(listDto,
                 listDto.isEmpty() ? "No users found" : "Users found successfully");
+    }
 
+    @Transactional(readOnly = true)
+    @Override
+    public GenericRespDTO<UserRespDTO> findUser(Long id) throws GenericException {
 
+        LOGGER.info("Finding user by id: {}", id);
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        var userDto = IUserMapper.INSTANCE.toResp(user);
+        return GeneralUtil.buildGenericSuccessResp(userDto,
+                "User found successfully");
     }
 }

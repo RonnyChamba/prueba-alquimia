@@ -15,5 +15,7 @@ public interface IUserMapper {
 
     User toEntity(UserReqDTO userReqDTO);
 
+    UserRespDTO toResp(User user);
+
     List<UserRespDTO> toListResp(List<User> users);
 }
