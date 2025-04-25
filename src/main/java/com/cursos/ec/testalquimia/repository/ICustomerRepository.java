@@ -10,6 +10,8 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
 
     boolean existsByIdentification(String identification);
 
+    boolean existsByIdentificationAndIdNot(String identification, Long id);
+
     @Query("SELECT c FROM Customer c " +
             "WHERE c.user.username = :usernameUser " +
             "AND (:paramFilter = '' OR ( c.identification LIKE %:paramFilter% OR upper(c.fullName) LIKE %:paramFilter%))")

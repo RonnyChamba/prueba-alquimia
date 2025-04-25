@@ -4,6 +4,7 @@ import com.cursos.ec.testalquimia.exceptions.GenericException;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerRespDTO;
+import com.cursos.ec.testalquimia.messages.response.CustomerUpdateReqDTO;
 import com.cursos.ec.testalquimia.messages.response.GenericRespDTO;
 
 import java.util.List;
@@ -28,4 +29,14 @@ public interface ICustomerService {
      * @throws GenericException : GenericException
      */
     GenericRespDTO<List<CustomerRespDTO>> getAllCustomers(String paramFilter) throws GenericException;
+
+    /**
+     * Method to update a customer
+     *
+     * @param id     : Long
+     * @param reqDTO : GenericReqDTO<CustomerUpdateReqDTO>
+     * @return : GenericRespDTO<CustomerRespDTO>
+     * @throws GenericException : GenericException
+     */
+    GenericRespDTO<CustomerRespDTO> updateCustomer(Long id, GenericReqDTO<CustomerUpdateReqDTO> reqDTO) throws GenericException;
 }

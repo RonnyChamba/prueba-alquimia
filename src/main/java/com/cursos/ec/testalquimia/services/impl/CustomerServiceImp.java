@@ -11,6 +11,7 @@ import com.cursos.ec.testalquimia.messages.request.AddressReqDTO;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerRespDTO;
+import com.cursos.ec.testalquimia.messages.response.CustomerUpdateReqDTO;
 import com.cursos.ec.testalquimia.messages.response.GenericRespDTO;
 import com.cursos.ec.testalquimia.repository.ICustomerRepository;
 import com.cursos.ec.testalquimia.repository.IUserRepository;
@@ -82,6 +83,54 @@ public class CustomerServiceImp implements ICustomerService {
                 .data(listCustomers)
                 .message(listCustomers.isEmpty() ? "No customers found" : "Customers found")
                 .build();
+    }
+
+    @Transactional
+    @Override
+    public GenericRespDTO<CustomerRespDTO> updateCustomer(Long id, GenericReqDTO<CustomerUpdateReqDTO> reqDTO) throws GenericException {
+
+        LOGGER.info("Update customer with id: {}, req: {}", id, reqDTO);
+
+        var data = reqDTO.payload();
+        var customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+
+        IdentificationUtil.validateIdentification(data.identificationType(), data.identification());
+        if (!customer.getIdentification().equals(data.identification())) {
+            validateIdentificationNotInUse(customer, data.identification());
+        }
+        setNewDataCustomer(customer, data);
+        var customerSaved = customerRepository.save(customer);
+
+        LOGGER.info("Customer updated: {}", customerSaved.getId());
+
+        return GenericRespDTO.<CustomerRespDTO>
+                        builder()
+                .status("OK")
+                .data(ICustomerMapper.INSTANCE.toCustomerRespDTO(customerSaved))
+                .message("Customer updated")
+                .build();
+    }
+
+    private void setNewDataCustomer(Customer customer, CustomerUpdateReqDTO data) {
+        customer.setIdentification(data.identification());
+        customer.setFullName(data.fullName());
+        customer.setIdentificationType(data.identificationType());
+        customer.setEmail(data.email());
+        customer.setCellphone(data.cellphone());
+    }
+
+    /**
+     * Method to validate if the identification is already in use by another customer
+     *
+     * @param customer       : Customer
+     * @param identification : String
+     * @throws GenericException : GenericException
+     */
+    private void validateIdentificationNotInUse(Customer customer, String identification) throws GenericException {
+        if (customerRepository.existsByIdentificationAndIdNot(identification, customer.getId())) {
+            throw new ConflictException("Customer already exists");
+        }
     }
 
     private Customer createModelCustomer(CustomerReqDTO data) {

@@ -3,6 +3,7 @@ package com.cursos.ec.testalquimia.controller;
 import com.cursos.ec.testalquimia.exceptions.GenericException;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
+import com.cursos.ec.testalquimia.messages.response.CustomerUpdateReqDTO;
 import com.cursos.ec.testalquimia.services.ICustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,12 @@ public class CustomerController {
         return new ResponseEntity<>(response, response.data().isEmpty()
                 ? HttpStatus.NO_CONTENT
                 : HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @Valid @RequestBody GenericReqDTO<CustomerUpdateReqDTO> genericReqDTO) throws GenericException {
+        var response = customerService.updateCustomer(id, genericReqDTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
