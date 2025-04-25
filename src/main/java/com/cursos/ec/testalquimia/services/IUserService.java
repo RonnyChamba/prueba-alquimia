@@ -15,4 +15,6 @@ public interface IUserService {
     GenericRespDTO<List<UserRespDTO>> finaAllUser() throws GenericException;
 
     GenericRespDTO<UserRespDTO> findUser(Long id) throws GenericException;
+
+    void deleteUser(Long id) throws GenericException;
 }

@@ -40,6 +40,12 @@ public class UserController {
         var response = userService.findUser(id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) throws GenericException {
+        userService.deleteUser(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -68,4 +68,15 @@ public class UserServiceImpl implements IUserService {
         return GeneralUtil.buildGenericSuccessResp(userDto,
                 "User found successfully");
     }
+
+    @Transactional
+    @Override
+    public void deleteUser(Long id) throws GenericException {
+
+        LOGGER.info("Deleting user by id: {}", id);
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        userRepository.delete(user);
+    }
 }
