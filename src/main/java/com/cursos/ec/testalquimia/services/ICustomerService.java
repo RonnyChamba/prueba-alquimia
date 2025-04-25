@@ -1,6 +1,7 @@
 package com.cursos.ec.testalquimia.services;
 
 import com.cursos.ec.testalquimia.exceptions.GenericException;
+import com.cursos.ec.testalquimia.messages.request.AddressReqDTO;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerRespDTO;
@@ -47,4 +48,13 @@ public interface ICustomerService {
      * @throws GenericException : GenericException
      */
     void deleteCustomer(Long id) throws GenericException;
+
+    /**
+     * Method to add an address to a customer
+     *
+     * @param id     : Long
+     * @param reqDTO : GenericReqDTO<AddressReqDTO>
+     * @throws GenericException : GenericException
+     */
+    void addAddressCustomer(Long id, GenericReqDTO<AddressReqDTO> reqDTO) throws GenericException;
 }

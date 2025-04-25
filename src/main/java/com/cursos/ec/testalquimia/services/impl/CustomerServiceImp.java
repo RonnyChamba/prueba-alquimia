@@ -126,6 +126,25 @@ public class CustomerServiceImp implements ICustomerService {
 
     }
 
+
+    @Transactional
+    @Override
+    public void addAddressCustomer(Long id, GenericReqDTO<AddressReqDTO> reqDTO) throws GenericException {
+
+        LOGGER.info("Add address to customer with id: {}, req: {}", id, reqDTO);
+
+        var data = reqDTO.payload();
+        var customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+
+        var address = createModelAddress(data);
+        address.setMainAddress(false);
+        customer.addAddress(address);
+        customerRepository.save(customer);
+
+        LOGGER.info("Address added to customer: {}", id);
+    }
+
     private void setNewDataCustomer(Customer customer, CustomerUpdateReqDTO data) {
         customer.setIdentification(data.identification());
         customer.setFullName(data.fullName());

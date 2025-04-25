@@ -1,6 +1,7 @@
 package com.cursos.ec.testalquimia.controller;
 
 import com.cursos.ec.testalquimia.exceptions.GenericException;
+import com.cursos.ec.testalquimia.messages.request.AddressReqDTO;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerUpdateReqDTO;
@@ -44,6 +45,12 @@ public class CustomerController {
     public ResponseEntity<?> deleteCustomer(@PathVariable Long id) throws GenericException {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/address")
+    public ResponseEntity<?> addAddressCustomer(@PathVariable Long id, @Valid @RequestBody GenericReqDTO<AddressReqDTO> genericReqDTO) throws GenericException {
+        customerService.addAddressCustomer(id, genericReqDTO);
+        return ResponseEntity.ok().build();
     }
 
 }
