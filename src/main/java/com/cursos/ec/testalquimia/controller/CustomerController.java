@@ -40,4 +40,10 @@ public class CustomerController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCustomer(@PathVariable Long id) throws GenericException {
+        customerService.deleteCustomer(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

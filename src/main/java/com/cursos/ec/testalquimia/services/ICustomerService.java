@@ -39,4 +39,12 @@ public interface ICustomerService {
      * @throws GenericException : GenericException
      */
     GenericRespDTO<CustomerRespDTO> updateCustomer(Long id, GenericReqDTO<CustomerUpdateReqDTO> reqDTO) throws GenericException;
+
+    /**
+     * Method to delete a customer
+     *
+     * @param id : Long
+     * @throws GenericException : GenericException
+     */
+    void deleteCustomer(Long id) throws GenericException;
 }

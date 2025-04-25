@@ -112,6 +112,20 @@ public class CustomerServiceImp implements ICustomerService {
                 .build();
     }
 
+    @Transactional
+    @Override
+    public void deleteCustomer(Long id) throws GenericException {
+
+        LOGGER.info("Delete customer with id: {}", id);
+
+        var customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+
+        customerRepository.delete(customer);
+        LOGGER.info("Customer deleted: {}", id);
+
+    }
+
     private void setNewDataCustomer(Customer customer, CustomerUpdateReqDTO data) {
         customer.setIdentification(data.identification());
         customer.setFullName(data.fullName());
