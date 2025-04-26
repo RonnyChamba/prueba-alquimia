@@ -2,11 +2,11 @@ package com.cursos.ec.testalquimia.services.impl;
 
 import com.cursos.ec.testalquimia.entities.Customer;
 import com.cursos.ec.testalquimia.entities.CustomerAddress;
-import com.cursos.ec.testalquimia.entities.User;
 import com.cursos.ec.testalquimia.exceptions.ConflictException;
 import com.cursos.ec.testalquimia.exceptions.GenericException;
 import com.cursos.ec.testalquimia.exceptions.NotFoundException;
 import com.cursos.ec.testalquimia.mappers.ICustomerMapper;
+import com.cursos.ec.testalquimia.mappers.IMapperService;
 import com.cursos.ec.testalquimia.messages.request.AddressReqDTO;
 import com.cursos.ec.testalquimia.messages.request.CustomerReqDTO;
 import com.cursos.ec.testalquimia.messages.request.GenericReqDTO;
@@ -15,7 +15,6 @@ import com.cursos.ec.testalquimia.messages.response.CustomerRespDTO;
 import com.cursos.ec.testalquimia.messages.response.CustomerUpdateReqDTO;
 import com.cursos.ec.testalquimia.messages.response.GenericRespDTO;
 import com.cursos.ec.testalquimia.repository.ICustomerRepository;
-import com.cursos.ec.testalquimia.repository.IUserRepository;
 import com.cursos.ec.testalquimia.services.ICustomerService;
 import com.cursos.ec.testalquimia.services.ISessionService;
 import com.cursos.ec.testalquimia.util.IdentificationUtil;
@@ -35,7 +34,7 @@ public class CustomerServiceImp implements ICustomerService {
     private static final Logger LOGGER = LogManager.getLogger(CustomerServiceImp.class);
     private final ICustomerRepository customerRepository;
     private final ISessionService sessionService;
-    private final IUserRepository userRepository;
+    private final IMapperService mapperService;
 
     @Transactional
     @Override
@@ -48,8 +47,8 @@ public class CustomerServiceImp implements ICustomerService {
         IdentificationUtil.validateIdentification(data.identificationType(), data.identification());
         validateExistsCustomer(data.identification());
 
-        var user = retrieveUserFromContext();
-        var customer = createModelCustomer(data);
+        var user = sessionService.retrieveUsernameFromContext();
+        var customer = mapperService.createModelCustomer(data);
         customer.setUser(user);
 
         var address = createModelAddress(data.mainAddress());
@@ -73,7 +72,7 @@ public class CustomerServiceImp implements ICustomerService {
 
         var paramSearch = Objects.requireNonNullElse(paramFilter, "").trim().toUpperCase();
 
-        var username = sessionService.retrieveUsernameFromContext();
+        var username = sessionService.retrieveUsernameFromContext().getUsername();
         var customers = customerRepository.findAllCustomerByUser(username, paramSearch);
 
         var listCustomers = ICustomerMapper.INSTANCE.toListCustomerRespDTO(customers);
@@ -185,13 +184,6 @@ public class CustomerServiceImp implements ICustomerService {
         }
     }
 
-    private Customer createModelCustomer(CustomerReqDTO data) {
-        var customer = ICustomerMapper.INSTANCE.toEntity(data);
-        customer.setProvince(data.mainAddress().province());
-        customer.setCity(data.mainAddress().city());
-        customer.setAddress(data.mainAddress().address());
-        return customer;
-    }
 
     private CustomerAddress createModelAddress(AddressReqDTO addressReqDTO) {
         var address = ICustomerMapper.INSTANCE.toEntityAddress(addressReqDTO);
@@ -203,12 +195,5 @@ public class CustomerServiceImp implements ICustomerService {
         if (customerRepository.existsByIdentification(identification)) {
             throw new ConflictException("Customer already exists");
         }
-    }
-
-    private User retrieveUserFromContext() throws GenericException {
-        var username = sessionService.retrieveUsernameFromContext();
-        LOGGER.info("Username User Login: {}", username);
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 }
